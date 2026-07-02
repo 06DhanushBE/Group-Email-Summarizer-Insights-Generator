@@ -1,0 +1,890 @@
+[
+  {
+    "thread_id": "T001",
+    "thread_title": "GreenSprout Overdue Payment",
+    "department": "Collections",
+    "topic": "GreenSprout",
+    "people": [
+      {
+        "name": "Rohan Kulkarni",
+        "email": "rohan.kulkarni@ucinclusive.example"
+      },
+      {
+        "name": "Client CFO",
+        "email": "cfo@greensprout.example"
+      },
+      {
+        "name": "Ananya Rao",
+        "email": "ananya.rao@ucinclusive.example"
+      },
+      {
+        "name": "Nandita Bose",
+        "email": "nandita.bose@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T001_1",
+        "task": "Get written commitment from the client",
+        "owner": "Rohan Kulkarni",
+        "due_date": "2026-06-03",
+        "status": "open"
+      },
+      {
+        "task_id": "T001_2",
+        "task": "Add account to daily collections alert",
+        "owner": "Sridhar",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T001_3",
+        "task": "Update portfolio tracker with risk status as amber",
+        "owner": "Ananya Rao",
+        "due_date": "2026-06-04",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T002",
+    "thread_title": "Tranche 2 Disbursement Conditions",
+    "department": "Finance",
+    "topic": "Solargrid",
+    "people": [
+      {
+        "name": "Nikhil Shah",
+        "email": "nikhil.shah@ucinclusive.example"
+      },
+      {
+        "name": "Client Ops",
+        "email": "ops@solargrid.example"
+      },
+      {
+        "name": "Vivek S",
+        "email": "vivek.s@ucinclusive.example"
+      },
+      {
+        "name": "Ananya Rao",
+        "email": "ananya.rao@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T002_1",
+        "task": "Obtain final insurance endorsement naming UCIC as loss payee",
+        "owner": "Client Ops",
+        "due_date": "2026-06-06",
+        "status": "open"
+      },
+      {
+        "task_id": "T002_2",
+        "task": "Update the client on the required final insurance endorsement",
+        "owner": "Nikhil Shah",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T002_3",
+        "task": "Keep the CP dashboard status as blocked until final insurance endorsement is received",
+        "owner": "Nikhil Shah",
+        "due_date": null,
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T003",
+    "thread_title": "EduBridge Q4 MIS Upload Issue",
+    "department": "Credit Monitoring",
+    "topic": "EduBridge",
+    "people": [
+      {
+        "name": "Ananya Rao",
+        "email": "ananya.rao@ucinclusive.example"
+      },
+      {
+        "name": "Borrower Admin",
+        "email": "admin@edubridge.example"
+      },
+      {
+        "name": "Sneha Patil",
+        "email": "sneha.patil@ucinclusive.example"
+      },
+      {
+        "name": "Nikhil Shah",
+        "email": "nikhil.shah@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T003_1",
+        "task": "Check the DSCR tab internally",
+        "owner": "EduBridge Admin",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T003_2",
+        "task": "Provide auditor certification",
+        "owner": "EduBridge Admin",
+        "due_date": "2026-06-10",
+        "status": "open"
+      },
+      {
+        "task_id": "T003_3",
+        "task": "Add reminders for June 10 and 12",
+        "owner": "Ananya Rao",
+        "due_date": "2026-06-10",
+        "status": "open"
+      },
+      {
+        "task_id": "T003_4",
+        "task": "Create a first version of covenant file validation logic using Python",
+        "owner": "Arjun",
+        "due_date": "2026-06-14",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T004",
+    "thread_title": "Portal Upload Issue with Bank Statements",
+    "department": "IT Support",
+    "topic": "Healthroots",
+    "people": [
+      {
+        "name": "Portal User",
+        "email": "finance@healthroots.example"
+      },
+      {
+        "name": "Sridhar Manjunath",
+        "email": "sridhar.m@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      },
+      {
+        "name": "Nikhil Shah",
+        "email": "nikhil.shah@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T004_1",
+        "task": "Update the FAQ to include common upload issues",
+        "owner": "Sridhar Manjunath",
+        "due_date": "2026-09-09",
+        "status": "open"
+      },
+      {
+        "task_id": "T004_2",
+        "task": "Coordinate with vendor for clearer validation message",
+        "owner": "Sridhar Manjunath",
+        "due_date": "2026-09-09",
+        "status": "open"
+      },
+      {
+        "task_id": "T004_3",
+        "task": "Log the UX defect",
+        "owner": "Sridhar Manjunath",
+        "due_date": null,
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "thread_id": "T005",
+    "thread_title": "PII Data Identification and Masking",
+    "department": "Compliance",
+    "topic": "PII Scanner and Masking Rules",
+    "people": [
+      {
+        "name": "Kavya Menon",
+        "email": "kavya.menon@ucinclusive.example"
+      },
+      {
+        "name": "Arjun Pillai",
+        "email": "arjun.pillai@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      },
+      {
+        "name": "Sridhar Manjunath",
+        "email": "sridhar.m@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T005_1",
+        "task": "Prepare PII inventory",
+        "owner": "Arjun Pillai",
+        "due_date": "2026-06-11",
+        "status": "open"
+      },
+      {
+        "task_id": "T005_2",
+        "task": "Create restricted test folder and give access to Tech, Compliance and Data teams",
+        "owner": "Sridhar Manjunath",
+        "due_date": "2026-06-07",
+        "status": "open"
+      },
+      {
+        "task_id": "T005_3",
+        "task": "Build a PII scanner",
+        "owner": null,
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T005_4",
+        "task": "Implement masking rules",
+        "owner": null,
+        "due_date": null,
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T006",
+    "thread_title": "Duplicate Client Records in CRM",
+    "department": "Operations",
+    "topic": "CRM Data Cleanup",
+    "people": [
+      {
+        "name": "Nandita Bose",
+        "email": "nandita.bose@ucinclusive.example"
+      },
+      {
+        "name": "Arjun Pillai",
+        "email": "arjun.pillai@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      },
+      {
+        "name": "Sridhar Manjunath",
+        "email": "sridhar.m@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T006_1",
+        "task": "Run fuzzy match on company name and GST/PAN to identify duplicate client records",
+        "owner": "Arjun Pillai",
+        "due_date": "2026-06-13",
+        "status": "open"
+      },
+      {
+        "task_id": "T006_2",
+        "task": "Create a review sheet with confidence score and suggested primary record",
+        "owner": "Arjun Pillai",
+        "due_date": "2026-06-13",
+        "status": "open"
+      },
+      {
+        "task_id": "T006_3",
+        "task": "Share the latest CRM export with Arjun and restrict edit access during dedupe testing",
+        "owner": "Sridhar Manjunath",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T006_4",
+        "task": "Approve merges based on the review sheet",
+        "owner": "Nandita Bose",
+        "due_date": "2026-06-13",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T007",
+    "thread_title": "FinBot Invoice Correction",
+    "department": "Finance",
+    "topic": "FinBot",
+    "people": [
+      {
+        "name": "Meera Nair",
+        "email": "meera.nair@ucinclusive.example"
+      },
+      {
+        "name": "Vendor Support",
+        "email": "support@finbot.example"
+      },
+      {
+        "name": "Deepa Iyer",
+        "email": "deepa.iyer@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T007_1",
+        "task": "Resend corrected invoice with PO reference, GST breakup, and milestone description",
+        "owner": "Vendor Support",
+        "due_date": "2026-06-09",
+        "status": "open"
+      },
+      {
+        "task_id": "T007_2",
+        "task": "Confirm service acceptance once revised invoice is received",
+        "owner": "Deepa Iyer",
+        "due_date": "2026-06-15",
+        "status": "open"
+      },
+      {
+        "task_id": "T007_3",
+        "task": "Process payment after PO match and acceptance note",
+        "owner": "Accounts",
+        "due_date": "2026-06-15",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T008",
+    "thread_title": "MIS Automation Prototype",
+    "department": "Technology",
+    "topic": "MIS Automation",
+    "people": [
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      },
+      {
+        "name": "Arjun Pillai",
+        "email": "arjun.pillai@ucinclusive.example"
+      },
+      {
+        "name": "Meera Nair",
+        "email": "meera.nair@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T008_1",
+        "task": "Build the first workflow for MIS automation",
+        "owner": "Arjun Pillai",
+        "due_date": "2026-06-16",
+        "status": "open"
+      },
+      {
+        "task_id": "T008_2",
+        "task": "Share last month's anonymized MIS export",
+        "owner": "Meera Nair",
+        "due_date": "2026-06-10",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T009",
+    "thread_title": "FarmLink LMS Schedule Discrepancy",
+    "department": "Finance",
+    "topic": "FarmLink",
+    "people": [
+      {
+        "name": "Nikhil Shah",
+        "email": "nikhil.shah@ucinclusive.example"
+      },
+      {
+        "name": "Meera Nair",
+        "email": "meera.nair@ucinclusive.example"
+      },
+      {
+        "name": "Sridhar Manjunath",
+        "email": "sridhar.m@ucinclusive.example"
+      },
+      {
+        "name": "Vivek S",
+        "email": "vivek.s@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T009_1",
+        "task": "Update LMS with corrected schedule",
+        "owner": "Sridhar Manjunath",
+        "due_date": "2026-06-11",
+        "status": "open"
+      },
+      {
+        "task_id": "T009_2",
+        "task": "Verify LMS update",
+        "owner": "Meera Nair",
+        "due_date": "2026-06-11",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T010",
+    "thread_title": "Phishing Attempt via Email",
+    "department": "IT Support",
+    "topic": "None",
+    "people": [
+      {
+        "name": "Priya Thomas",
+        "email": "priya.thomas@ucinclusive.example"
+      },
+      {
+        "name": "Sridhar Manjunath",
+        "email": "sridhar.m@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      },
+      {
+        "name": "Kavya Menon",
+        "email": "kavya.menon@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T010_1",
+        "task": "Send employee advisory",
+        "owner": "Sridhar Manjunath",
+        "due_date": "2026-06-11",
+        "status": "open"
+      },
+      {
+        "task_id": "T010_2",
+        "task": "Provide closure note for incident register",
+        "owner": "IT",
+        "due_date": "2026-06-12",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T011",
+    "thread_title": "Board MIS Commentary Inputs",
+    "department": "Finance",
+    "topic": "Board MIS",
+    "people": [
+      {
+        "name": "Nandita Bose",
+        "email": "nandita.bose@ucinclusive.example"
+      },
+      {
+        "name": "Rohan Kulkarni",
+        "email": "rohan.kulkarni@ucinclusive.example"
+      },
+      {
+        "name": "Sneha Patil",
+        "email": "sneha.patil@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T011_1",
+        "task": "Provide collections trend update",
+        "owner": "Rohan Kulkarni",
+        "due_date": "2026-06-13",
+        "status": "open"
+      },
+      {
+        "task_id": "T011_2",
+        "task": "Provide risk view update",
+        "owner": "Sneha Patil",
+        "due_date": "2026-06-13",
+        "status": "open"
+      },
+      {
+        "task_id": "T011_3",
+        "task": "Provide automation update",
+        "owner": "Prasanna Alagesan",
+        "due_date": "2026-06-12",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T012",
+    "thread_title": "Controlled Clause Library Project",
+    "department": "Compliance",
+    "topic": "Sanction Letters",
+    "people": [
+      {
+        "name": "Vivek S",
+        "email": "vivek.s@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      },
+      {
+        "name": "Ananya Rao",
+        "email": "ananya.rao@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T012_1",
+        "task": "Prepare 20 approved clause samples",
+        "owner": "Vivek S",
+        "due_date": "2026-06-17",
+        "status": "open"
+      },
+      {
+        "task_id": "T012_2",
+        "task": "Create a simple searchable repository prototype",
+        "owner": "Arjun",
+        "due_date": null,
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T013",
+    "thread_title": "Automating Loan Matching Process",
+    "department": "Technology",
+    "topic": "Loan Matching Automation",
+    "people": [
+      {
+        "name": "Amit Verma",
+        "email": "amit.verma@ucinclusive.example"
+      },
+      {
+        "name": "Meera Nair",
+        "email": "meera.nair@ucinclusive.example"
+      },
+      {
+        "name": "Arjun Pillai",
+        "email": "arjun.pillai@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T013_1",
+        "task": "Share anonymized bank statement",
+        "owner": "Amit Verma",
+        "due_date": "2026-06-14",
+        "status": "open"
+      },
+      {
+        "task_id": "T013_2",
+        "task": "Confirm threshold for auto-match versus manual review",
+        "owner": "Meera Nair",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T013_3",
+        "task": "Test matching script using amount, date window, and fuzzy name score",
+        "owner": "Arjun Pillai",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T013_4",
+        "task": "Document matching logic",
+        "owner": "Arjun Pillai",
+        "due_date": null,
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T014",
+    "thread_title": "Missing KYC Documents for Credit Review",
+    "department": "Compliance",
+    "topic": "KYC File",
+    "people": [
+      {
+        "name": "Nikhil Shah",
+        "email": "nikhil.shah@ucinclusive.example"
+      },
+      {
+        "name": "Ananya Rao",
+        "email": "ananya.rao@ucinclusive.example"
+      },
+      {
+        "name": "Kavya Menon",
+        "email": "kavya.menon@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T014_1",
+        "task": "Obtain the missing KYC documents from the client",
+        "owner": "Nikhil Shah",
+        "due_date": "2026-06-15",
+        "status": "open"
+      },
+      {
+        "task_id": "T014_2",
+        "task": "Add a deficiency checklist for KYC uploads",
+        "owner": "Technology team",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T014_3",
+        "task": "Include KYC deficiency checklist as a potential document automation use case",
+        "owner": "Arjun",
+        "due_date": null,
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T015",
+    "thread_title": "Hiring Process Improvement",
+    "department": "HR",
+    "topic": "null",
+    "people": [
+      {
+        "name": "Priya Thomas",
+        "email": "priya.thomas@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T015_1",
+        "task": "Send top CV profiles",
+        "owner": "Priya Thomas",
+        "due_date": "2026-06-14",
+        "status": "open"
+      },
+      {
+        "task_id": "T015_2",
+        "task": "Send evaluation criteria rubric",
+        "owner": "Prasanna Alagesan",
+        "due_date": "2026-06-15",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T016",
+    "thread_title": "Collections Dashboard Access Request",
+    "department": "Operations",
+    "topic": "Collections Dashboard",
+    "people": [
+      {
+        "name": "Rohan Kulkarni",
+        "email": "rohan.kulkarni@ucinclusive.example"
+      },
+      {
+        "name": "Arjun Pillai",
+        "email": "arjun.pillai@ucinclusive.example"
+      },
+      {
+        "name": "Kavya Menon",
+        "email": "kavya.menon@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T016_1",
+        "task": "Configure view with field-level restrictions",
+        "owner": "Arjun Pillai",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T016_2",
+        "task": "Ensure access expires in 90 days unless renewed",
+        "owner": "Sridhar",
+        "due_date": null,
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T017",
+    "thread_title": "Automation Triggers for Credit Monitoring",
+    "department": "Credit Monitoring",
+    "topic": "Credit Monitoring Automation",
+    "people": [
+      {
+        "name": "Sneha Patil",
+        "email": "sneha.patil@ucinclusive.example"
+      },
+      {
+        "name": "Ananya Rao",
+        "email": "ananya.rao@ucinclusive.example"
+      },
+      {
+        "name": "Arjun Pillai",
+        "email": "arjun.pillai@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T017_1",
+        "task": "Create a one-page automation design and data requirement note",
+        "owner": "Arjun Pillai",
+        "due_date": "2026-06-20",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T018",
+    "thread_title": "CIBIL API Discrepancy Resolution",
+    "department": "Credit Monitoring",
+    "topic": "CIBIL API",
+    "people": [
+      {
+        "name": "Ananya Rao",
+        "email": "ananya.rao@ucinclusive.example"
+      },
+      {
+        "name": "Sridhar Manjunath",
+        "email": "sridhar.m@ucinclusive.example"
+      },
+      {
+        "name": "Kavya Menon",
+        "email": "kavya.menon@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T018_1",
+        "task": "Investigate CIBIL API discrepancy",
+        "owner": "Sridhar Manjunath",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T018_2",
+        "task": "Attach exception note before credit committee",
+        "owner": "Ananya Rao",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T018_3",
+        "task": "Raise issue with vendor",
+        "owner": "Sridhar Manjunath",
+        "due_date": null,
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "thread_id": "T019",
+    "thread_title": "Standardizing Field Visit Notes",
+    "department": "Operations",
+    "topic": "Field Visit Capture Template",
+    "people": [
+      {
+        "name": "Nandita Bose",
+        "email": "nandita.bose@ucinclusive.example"
+      },
+      {
+        "name": "Rohan Kulkarni",
+        "email": "rohan.kulkarni@ucinclusive.example"
+      },
+      {
+        "name": "Ananya Rao",
+        "email": "ananya.rao@ucinclusive.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T019_1",
+        "task": "Draft a field visit capture template",
+        "owner": "Arjun",
+        "due_date": "2026-06-24",
+        "status": "open"
+      },
+      {
+        "task_id": "T019_2",
+        "task": "Pilot with 3 visits next month",
+        "owner": null,
+        "due_date": null,
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "thread_id": "T020",
+    "thread_title": "KYC API Intermittent Failure",
+    "department": "Operations",
+    "topic": "KYC API",
+    "people": [
+      {
+        "name": "Sridhar Manjunath",
+        "email": "sridhar.m@ucinclusive.example"
+      },
+      {
+        "name": "Nikhil Shah",
+        "email": "nikhil.shah@ucinclusive.example"
+      },
+      {
+        "name": "Vendor Support",
+        "email": "support@finbot.example"
+      },
+      {
+        "name": "Prasanna Alagesan",
+        "email": "prasanna.alagesan@ucinclusive.example"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "T020_1",
+        "task": "Capture logs and check SLA clause",
+        "owner": "Sridhar Manjunath",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T020_2",
+        "task": "Mark impacted files and confirm all were processed after retry",
+        "owner": "Nikhil Shah",
+        "due_date": null,
+        "status": "open"
+      },
+      {
+        "task_id": "T020_3",
+        "task": "Share root cause analysis",
+        "owner": "Vendor Support",
+        "due_date": "2026-06-21",
+        "status": "open"
+      },
+      {
+        "task_id": "T020_4",
+        "task": "Add uptime monitoring for KYC API",
+        "owner": null,
+        "due_date": null,
+        "status": "open"
+      }
+    ]
+  }
+]
