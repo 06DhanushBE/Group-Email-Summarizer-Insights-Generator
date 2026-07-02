@@ -1,0 +1,722 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour",
+              "minute": 15
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "q": "to:(prod1-ucic@googlegroups.com OR demo1-ucic@googlegroups.com OR hr-ucic@googlegroups.com)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6e8d8a06-938d-47c8-8069-d7fdb3d97a70",
+      "name": "Gmail Trigger",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QgGZzCuUKeBWFeBm",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "thread",
+        "operation": "get",
+        "threadId": "={{ $json.threadId }}",
+        "simple": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        0
+      ],
+      "id": "fedb2d41-8aab-4dd3-bcf3-fa7b246b955f",
+      "name": "Get a thread",
+      "webhookId": "89c63ed3-d1cf-4755-903b-9b83deecb23e",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QgGZzCuUKeBWFeBm",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function getHeader(msg, name) {\n  return msg[name] || '';\n}\n\nfunction decodeBody(payload) {\n  function findBody(part) {\n    if (part.mimeType === 'text/plain' && part.body?.data) {\n      return Buffer.from(part.body.data, 'base64').toString('utf-8');\n    }\n    if (part.parts) {\n      for (const p of part.parts) {\n        const result = findBody(p);\n        if (result) return result;\n      }\n    }\n    return '';\n  }\n  return findBody(payload) || (payload.body?.data\n    ? Buffer.from(payload.body.data, 'base64').toString('utf-8')\n    : '');\n}\n\nfunction findAttachments(part, results = []) {\n  if (part.filename && part.filename.trim() !== '') {\n    results.push(part.filename);\n  }\n  if (part.parts) {\n    part.parts.forEach(p => findAttachments(p, results));\n  }\n  return results;\n}\n\nfunction cleanBody(body) {\n  // 1. Strip Google Groups footer (starts with \"-- \" signature delimiter)\n  let cleaned = body.split(/\\r?\\n--\\s*\\r?\\n/)[0];\n  // 2. Strip quoted reply chain — [\\s\\S]{0,150} allows the \"On ... wrote:\" preamble\n  //    to span a line break (long sender names/dates wrap), unlike \".\" which stops at \\n\n  cleaned = cleaned.split(/\\r?\\n\\r?\\nOn [\\s\\S]{0,150}?wrote:[\\s\\S]*/)[0];\n  return cleaned.trim();\n}\n\nfunction parseFrom(fromHeader) {\n  const name = fromHeader.split('<')[0].trim().replace(/\"/g, '');\n  const emailMatch = (fromHeader.match(/<(.+)>/) || [, fromHeader])[1];\n  return { name, email: emailMatch };\n}\n\nconst thread = $input.first().json;\nconst messages = thread.messages || [];\n\nconst rows = messages.map(msg => {\n  const from = parseFrom(getHeader(msg, 'From'));\n  const to = getHeader(msg, 'To');\n  const attachments = findAttachments(msg.payload);\n  return {\n    Email_ID: msg.id,\n    Thread_ID: msg.threadId,\n    Sent_Timestamp: new Date(parseInt(msg.internalDate)).toISOString(),\n    Channel_Type: 'Email',\n    From_Name: from.name,\n    From_Email: from.email,\n    To_Group: to,\n    CC: getHeader(msg, 'Cc'),\n    Subject: getHeader(msg, 'Subject'),\n    Email_Body: cleanBody(decodeBody(msg.payload)),\n    Attachment_Name: attachments.join('; '),\n  };\n});\n\nrows.sort((a, b) => new Date(a.Sent_Timestamp) - new Date(b.Sent_Timestamp));\nrows.forEach((r, i) => r.Thread_Sequence = i + 1);\n\nrows.forEach(r => {\n  r.Thread_Title = '';\n  r.Department = '';\n  r.Conversation_Category = '';\n  r.Client_Project_or_Topic = '';\n  r.Sender_Role = '';\n  r.Priority = '';\n});\n\nreturn rows.map(r => ({ json: r }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        0
+      ],
+      "id": "e156caf3-c77a-4ae1-a6fe-e1b7e24d7fe2",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "let raw = $input.first().json.text || $input.first().json.output || '';\nraw = raw.trim().replace(/^```json\\s*/i, '').replace(/^```\\s*/i, '').replace(/```\\s*$/i, '').trim();\n\nlet aiOutput;\ntry {\n  aiOutput = JSON.parse(raw);\n} catch (e) {\n  const match = raw.match(/\\{[\\s\\S]*\\}/);\n  if (match) {\n    aiOutput = JSON.parse(match[0]);\n  } else {\n    throw new Error('AI did not return valid JSON: ' + raw.substring(0, 200));\n  }\n}\n\nconst originalRows = $('Code in JavaScript').all().map(item => item.json);\nconst threadId = originalRows[0].Thread_ID;\n\n// Output 1: realdb rows (one per email)\nconst realdbRows = originalRows.map(row => ({\n  email_id: row.Email_ID,\n  thread_id: row.Thread_ID,\n  thread_sequence: row.Thread_Sequence,\n  channel_type: row.Channel_Type,\n  department: aiOutput.department || '',\n  conversation_category: aiOutput.conversation_category || '',\n  client_project_or_topic: aiOutput.client_project_or_topic || '',\n  thread_title: aiOutput.thread_title || '',\n  sent_timestamp: row.Sent_Timestamp,\n  from_name: row.From_Name,\n  from_email: row.From_Email,\n  sender_role: aiOutput.sender_role || '',\n  to_group: row.To_Group,\n  cc: row.CC,\n  subject: row.Subject,\n  email_body: row.Email_Body,\n  attachment_name: row.Attachment_Name,\n  priority: aiOutput.priority || '',\n  summary: aiOutput.summary || '',\n  _target: 'realdb',\n}));\n\n// Output 2: tasks rows (one per extracted task)\nconst tasks = Array.isArray(aiOutput.tasks) ? aiOutput.tasks : [];\nconst taskRows = tasks.map((t, i) => ({\n  task_id: `${threadId}_${i + 1}`,\n  thread_id: threadId,\n  task: t.task || '',\n  owner: t.owner || null,\n  due_date: t.due_date || null,\n  status: t.status || 'open',\n  _target: 'tasks',\n}));\n\n// Output 3: Neo4j payload (one object per thread)\nconst neo4jPayload = [{\n  thread_id: threadId,\n  thread_title: aiOutput.thread_title || '',\n  department: aiOutput.department || '',\n  topic: aiOutput.client_project_or_topic || '',\n  people: [...new Set(originalRows.map(r => JSON.stringify({ name: r.From_Name, email: r.From_Email })))].map(s => JSON.parse(s)),\n  tasks: taskRows.map(t => ({ task_id: t.task_id, task: t.task, owner: t.owner, due_date: t.due_date, status: t.status })),\n  _target: 'neo4j',\n}];\n\nreturn [...realdbRows, ...taskRows, ...neo4jPayload].map(r => ({ json: r }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        0
+      ],
+      "id": "e3f56ca3-12be-4aa9-ade0-404403a083f7",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.conversation_text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are an email thread analyst for UCIC (a financial services company). You will be given the full text of an email thread (all messages, chronological, with sender and timestamp). Analyze the ENTIRE thread as one conversation, not message-by-message.  Always respond with ONLY a single valid JSON object — no markdown code fences, no explanation, no text before or after it. The JSON must have exactly these 8 keys:  {   \"thread_title\": \"A short, human-readable title summarizing what this thread is about (synthesize from subject + content, 5-10 words, not just a copy of the subject line)\",   \"department\": \"The business department this thread belongs to (e.g. HR, Collections, Compliance, IT Support, Finance, Legal, Operations, Technology, Risk, Credit Monitoring, Data Governance) — infer from the actual content, not the group name\",   \"conversation_category\": \"One of: Client, Vendor, Automation Project, Non-Client Topic, Customer Support, Security Incident, Reporting, Hiring, Access Request, System Issue\",   \"client_project_or_topic\": \"The specific client name, project name, or topic this thread concerns, extracted from the content\",   \"sender_role\": \"The likely role of the FIRST sender in the thread (e.g. Collections Manager, Credit Analyst, HR Coordinator, Client Contact, Vendor Support) — infer from context and email domain\",   \"priority\": \"High, Medium, or Low — based on urgency language, deadlines, or severity mentioned\",   \"summary\": \"A 2-3 sentence summary of what happened in this thread — what was discussed, what was decided or is pending\",   \"tasks\": [     {       \"task\": \"description of a specific action item mentioned in the thread\",       \"owner\": \"the person responsible, if named or clearly implied in the thread — otherwise null\",       \"due_date\": \"YYYY-MM-DD if a specific date or deadline is mentioned or can be reasonably calculated from context, otherwise null\",       \"status\": \"open\"     }   ] }  Each task in the \"tasks\" array is independent — different tasks in the same thread may have different owners and different due dates. Extract each one separately based on what the thread actually says, don't assume they all share the same owner or deadline.  If the thread has no clear action items, return an empty array for \"tasks\". Return raw JSON only. Do not wrap it in code fences or any other formatting."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        768,
+        0
+      ],
+      "id": "ed48b828-f81a-4bff-90af-4bdedefea20a",
+      "name": "Basic LLM Chain",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        768,
+        208
+      ],
+      "id": "3c4f19f6-cfea-4626-85a4-e1f10311149e",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "HiaigtIqkt3fLIax",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://9b52f6ee.databases.neo4j.io/db/9b52f6ee/query/v2",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"statement\": \"MERGE (t:Thread {thread_id: $thread_id}) SET t.thread_title = $thread_title, t.department = $department MERGE (top:Topic {name: $topic}) MERGE (t)-[:ABOUT]->(top) MERGE (d:Department {name: $department}) MERGE (t)-[:BELONGS_TO]->(d) WITH t UNWIND $people AS person MERGE (p:Person {email: person.email}) SET p.name = person.name MERGE (p)-[:PARTICIPATED_IN]->(t) WITH t UNWIND $tasks AS task MERGE (task_node:Task {task_id: task.task_id}) SET task_node.task = task.task, task_node.due_date = task.due_date, task_node.status = task.status MERGE (task_node)-[:EXTRACTED_FROM]->(t) FOREACH (ignoreMe IN CASE WHEN task.owner IS NOT NULL THEN [1] ELSE [] END | MERGE (owner:Person {name: task.owner}) MERGE (owner)-[:OWNS]->(task_node))\",\n  \"parameters\": {\n    \"thread_id\": \"{{ $json.thread_id }}\",\n    \"thread_title\": \"{{ $json.thread_title }}\",\n    \"department\": \"{{ $json.department }}\",\n    \"topic\": \"{{ $json.topic }}\",\n    \"people\": {{ JSON.stringify($json.people) }},\n    \"tasks\": {{ JSON.stringify($json.tasks) }}\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1696,
+        208
+      ],
+      "id": "24f642ba-fc3a-400e-a986-1b0aa70b0f04",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "miIFmXqCLhWv5PXP",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}// Combines all per-email rows from Code node 1 into one text blob for the AI\nconst items = $input.all();\nconst rows = items.map(item => item.json);\n\n// Build a readable conversation transcript, oldest first (already sorted upstream)\nconst conversationText = rows.map(r =>\n  `[${r.Sent_Timestamp}] ${r.From_Name} (${r.From_Email}):\\n${r.Email_Body}`\n).join('\\n\\n---\\n\\n');\n\nconst firstRow = rows[0];\n\nreturn [{\n  json: {\n    Thread_ID: firstRow.Thread_ID,\n    original_subject: firstRow.Subject,\n    conversation_text: conversationText,\n    message_count: rows.length,\n  }\n}];\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        0
+      ],
+      "id": "a1d0d306-7325-4a5e-8d30-e8970e91c1a0",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json._target }}",
+                    "rightValue": "realdb",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "4361f981-a52e-48bd-b98a-7eb42498fa05"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e858c13b-a8af-44ac-949b-1ce689c86134",
+                    "leftValue": "={{ $json._target }}",
+                    "rightValue": "tasks",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e8429f87-5091-4839-ae3d-5a0d5fcc6f14",
+                    "leftValue": "={{ $json._target }}",
+                    "rightValue": "neo4j",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1360,
+        -16
+      ],
+      "id": "ad71be7d-1ba9-456f-8514-f1712b193dd1",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "tableId": "tasks",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "task_id",
+              "fieldValue": "={{ $json.task_id }}"
+            },
+            {
+              "fieldId": "thread_id",
+              "fieldValue": "={{ $json.thread_id }}\""
+            },
+            {
+              "fieldId": "task",
+              "fieldValue": "={{ $json.task }}"
+            },
+            {
+              "fieldId": "owner",
+              "fieldValue": "={{ $json.owner }}"
+            },
+            {
+              "fieldId": "due_date",
+              "fieldValue": "={{ $json.due_date }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        0
+      ],
+      "id": "01f67960-102e-4a06-b4a9-dcd55ad2e821",
+      "name": "Create a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "eGH2L4rVFKRacSdw",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "tableId": "realdb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "email_id",
+              "fieldValue": "={{ $json.email_id }}"
+            },
+            {
+              "fieldId": "thread_id",
+              "fieldValue": "={{ $json.thread_id }}"
+            },
+            {
+              "fieldId": "thread_sequence",
+              "fieldValue": "={{ $json.thread_sequence }}"
+            },
+            {
+              "fieldId": "channel_type",
+              "fieldValue": "={{ $json.channel_type }}"
+            },
+            {
+              "fieldId": "department",
+              "fieldValue": "={{ $json.department }}"
+            },
+            {
+              "fieldId": "conversation_category",
+              "fieldValue": "={{ $json.conversation_category }}"
+            },
+            {
+              "fieldId": "client_project_or_topic",
+              "fieldValue": "={{ $json.client_project_or_topic }}"
+            },
+            {
+              "fieldId": "thread_title",
+              "fieldValue": "={{ $json.thread_title }}"
+            },
+            {
+              "fieldId": "sent_timestamp",
+              "fieldValue": "={{ $json.sent_timestamp }}"
+            },
+            {
+              "fieldId": "from_name",
+              "fieldValue": "={{ $json.from_name }}"
+            },
+            {
+              "fieldId": "from_email",
+              "fieldValue": "={{ $json.from_email }}"
+            },
+            {
+              "fieldId": "sender_role",
+              "fieldValue": "={{ $json.sender_role }}"
+            },
+            {
+              "fieldId": "to_group",
+              "fieldValue": "={{ $json.to_group }}"
+            },
+            {
+              "fieldId": "cc",
+              "fieldValue": "={{ $json.cc }}"
+            },
+            {
+              "fieldId": "subject",
+              "fieldValue": "={{ $json.subject }}"
+            },
+            {
+              "fieldId": "email_body",
+              "fieldValue": "={{ $json.email_body }}"
+            },
+            {
+              "fieldId": "attachment_name",
+              "fieldValue": "={{ $json.attachment_name }}"
+            },
+            {
+              "fieldId": "priority",
+              "fieldValue": "={{ $json.priority }}"
+            },
+            {
+              "fieldId": "summary",
+              "fieldValue": "={{ $json.summary }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        -192
+      ],
+      "id": "72b23fd7-8b36-4f57-a437-ae5ab75e8cc6",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "eGH2L4rVFKRacSdw",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "realdb",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "email_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.email_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "email_id",
+              "fieldValue": "={{ $json.email_id }}"
+            },
+            {
+              "fieldId": "thread_id",
+              "fieldValue": "={{ $json.thread_id }}"
+            },
+            {
+              "fieldId": "thread_sequence",
+              "fieldValue": "={{ $json.thread_sequence }}"
+            },
+            {
+              "fieldId": "channel_type",
+              "fieldValue": "={{ $json.channel_type }}"
+            },
+            {
+              "fieldId": "department",
+              "fieldValue": "={{ $json.department }}"
+            },
+            {
+              "fieldId": "conversation_category",
+              "fieldValue": "={{ $json.conversation_category }}"
+            },
+            {
+              "fieldId": "client_project_or_topic",
+              "fieldValue": "={{ $json.client_project_or_topic }}"
+            },
+            {
+              "fieldId": "thread_title",
+              "fieldValue": "={{ $json.thread_title }}"
+            },
+            {
+              "fieldId": "sent_timestamp",
+              "fieldValue": "={{ $json.sent_timestamp }}"
+            },
+            {
+              "fieldId": "from_name",
+              "fieldValue": "={{ $json.from_name }}"
+            },
+            {
+              "fieldId": "from_email",
+              "fieldValue": "={{ $json.from_email }}"
+            },
+            {
+              "fieldId": "sender_role",
+              "fieldValue": "={{ $json.sender_role }}"
+            },
+            {
+              "fieldId": "to_group",
+              "fieldValue": "={{ $json.to_group }}"
+            },
+            {
+              "fieldId": "cc",
+              "fieldValue": "={{ $json.cc }}"
+            },
+            {
+              "fieldId": "subject",
+              "fieldValue": "={{ $json.subject }}"
+            },
+            {
+              "fieldId": "email_body",
+              "fieldValue": "={{ $json.email_body }}"
+            },
+            {
+              "fieldId": "attachment_name",
+              "fieldValue": "={{ $json.attachment_name }}"
+            },
+            {
+              "fieldId": "priority",
+              "fieldValue": "={{ $json.priority }}"
+            },
+            {
+              "fieldId": "summary",
+              "fieldValue": "={{ $json.summary }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        -112
+      ],
+      "id": "20145a53-6f66-4666-9b7d-88ff32d01e38",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "eGH2L4rVFKRacSdw",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "task_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.task_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "task_id",
+              "fieldValue": "={{ $json.task_id }}"
+            },
+            {
+              "fieldId": "thread_id",
+              "fieldValue": "={{ $json.thread_id }}"
+            },
+            {
+              "fieldId": "task",
+              "fieldValue": "={{ $json.task }}"
+            },
+            {
+              "fieldId": "owner",
+              "fieldValue": "={{ $json.owner }}"
+            },
+            {
+              "fieldId": "due_date",
+              "fieldValue": "={{ $json.due_date }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1904,
+        96
+      ],
+      "id": "ae574234-62ae-4933-92ca-63074210c381",
+      "name": "Update a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "eGH2L4rVFKRacSdw",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a thread",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a thread": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a row1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ab2e37dc-1939-4d95-9f9f-6b8e09e11e22",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "47832deb6585c083e49a07be14dac72730c6e951944f2c050a003b782ce05f20"
+  },
+  "nodeGroups": [],
+  "id": "XzYh5y0afeJPadnS",
+  "tags": []
+}
