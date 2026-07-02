@@ -1,0 +1,377 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+    --bg: #f4e6c8;
+    --bg-soft: #f8efd9;
+    --surface: #fff7eb;
+    --surface-strong: #fdf1d8;
+    --line: #d8b98b;
+    --text: #4b2f1f;
+    --muted: #7c5a43;
+    --accent: #f28c28;
+    --accent-2: #c36a12;
+    --accent-3: #a44e12;
+    --sidebar-width: 340px;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+    min-height: 100%;
+    overflow: hidden;
+    overflow-x: hidden;
+    background:
+        radial-gradient(circle at top left, rgba(255, 201, 140, 0.35), transparent 30%),
+        radial-gradient(circle at top right, rgba(203, 114, 38, 0.18), transparent 28%),
+        linear-gradient(180deg, #f7ecd2 0%, #f2e1bd 100%);
+    color: var(--text);
+    font-family: Inter, "Segoe UI", sans-serif;
+}
+
+.app-shell {
+    height: 100vh;
+    display: block;
+}
+
+.app-sidebar {
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: var(--sidebar-width) !important;
+    max-width: var(--sidebar-width) !important;
+    overflow-y: auto;
+    z-index: 20;
+    padding: 28px 24px 24px;
+    background: linear-gradient(180deg, #9f5417 0%, #7f3e13 100%);
+    color: #fff6ea;
+    box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+.app-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    max-width: calc(100% - var(--sidebar-width));
+    flex: 0 0 calc(100% - var(--sidebar-width)) !important;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 22px 24px 36px;
+}
+
+.brand-block {
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.brand-kicker,
+.page-kicker,
+.panel-title,
+.answer-kicker,
+.section-label,
+.sidebar-footnote {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+}
+
+.brand-kicker {
+    color: #f8d4a2;
+    margin-bottom: 6px;
+}
+
+.brand-title,
+.page-title {
+    font-family: "Libre Baskerville", Georgia, serif;
+    font-weight: 700;
+    line-height: 1.05;
+    margin: 0;
+}
+
+.brand-title {
+    font-size: 2rem;
+    color: #fff8ef;
+}
+
+.brand-subtitle,
+.page-lead {
+    margin: 12px 0 0;
+    color: rgba(255, 245, 233, 0.85);
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.section-label {
+    display: block;
+    margin: 18px 0 10px;
+    color: #f8d4a2;
+}
+
+.nav-stack .nav-link {
+    color: rgba(255, 247, 235, 0.9);
+    padding: 0.75rem 0.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 0;
+}
+
+.nav-stack .nav-link:hover,
+.nav-stack .nav-link.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-footnote {
+    margin-top: 26px;
+    color: rgba(255, 241, 225, 0.7);
+    line-height: 1.5;
+}
+
+.page-hero {
+    margin-bottom: 20px;
+    padding: 24px 26px 18px;
+    background: linear-gradient(180deg, #9f5417 0%, #8a4514 100%);
+    border: 1px solid rgba(122, 67, 20, 0.35);
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(90, 49, 17, 0.12);
+    color: #fff7ec;
+}
+
+.page-kicker {
+    color: #ffd29a;
+    margin-bottom: 8px;
+}
+
+.page-title {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    color: #fff8ef;
+}
+
+.header-badge {
+    margin-top: 14px;
+    padding: 0.5rem 0.75rem;
+    background: #f28c28 !important;
+    color: #fffaf3 !important;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.metric-card,
+.panel-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 6px 18px rgba(88, 54, 20, 0.08);
+}
+
+.metric-card {
+    min-height: 110px;
+    overflow: hidden;
+    position: relative;
+}
+
+.metric-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 18%;
+    height: 100%;
+    background: linear-gradient(180deg, #ff8a3c 0%, #ea6a1b 100%);
+}
+
+.metric-value {
+    font-family: "Libre Baskerville", Georgia, serif;
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.metric-label {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.metric-primary,
+.metric-danger {
+    color: var(--text);
+}
+
+.panel-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.panel-title {
+    color: var(--text);
+    margin-bottom: 14px;
+    font-weight: 700;
+}
+
+.chart-surface {
+    height: 360px;
+}
+
+.theme-radio .form-check-input:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.theme-radio .form-check-label {
+    color: var(--text);
+}
+
+.theme-dropdown .Select-control,
+.theme-dropdown .Select-menu-outer,
+.theme-dropdown .Select-value,
+.theme-dropdown .Select-placeholder,
+.query-input input,
+.query-button {
+    border-color: var(--line) !important;
+}
+
+.theme-dropdown .Select-control,
+.theme-dropdown .Select-menu-outer,
+.query-input input {
+    background-color: var(--surface) !important;
+    color: var(--text) !important;
+    border-radius: 10px !important;
+}
+
+.theme-dropdown .Select-control,
+.theme-dropdown .Select-input,
+.theme-dropdown .Select-value-label,
+.theme-dropdown .Select-placeholder,
+.theme-dropdown .Select-option,
+.theme-dropdown .Select-clear-zone,
+.theme-dropdown .Select-arrow-zone {
+    color: var(--text) !important;
+    background-color: var(--surface) !important;
+}
+
+.theme-dropdown .Select-menu-outer {
+    background-color: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: 0 8px 20px rgba(88, 54, 20, 0.12) !important;
+}
+
+.theme-dropdown .Select-option {
+    background-color: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+.theme-dropdown .Select-option.is-focused {
+    background-color: #f7dfbc !important;
+    color: var(--text) !important;
+}
+
+.theme-dropdown .Select-option.is-selected {
+    background-color: #edb46f !important;
+    color: #4a2a16 !important;
+}
+
+.theme-dropdown .Select--single>.Select-control .Select-value,
+.theme-dropdown .Select--single>.Select-control .Select-value .Select-value-label {
+    color: var(--text) !important;
+}
+
+.theme-dropdown .Select.has-value.Select--single>.Select-control .Select-value,
+.theme-dropdown .Select.has-value.Select--single>.Select-control .Select-value .Select-value-label,
+.theme-dropdown .Select.has-value.is-clearable.Select--single>.Select-control .Select-value .Select-value-label {
+    color: #3a2215 !important;
+    opacity: 1 !important;
+    font-weight: 600;
+}
+
+.theme-dropdown .Select-input>input {
+    color: #3a2215 !important;
+}
+
+.query-button {
+    background: linear-gradient(180deg, #ff8a3c 0%, #ea6a1b 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+}
+
+.theme-table {
+    border: none;
+    background: var(--surface);
+    color: var(--text);
+}
+
+.theme-table .dash-spreadsheet-container .dash-spreadsheet-inner table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.theme-table .dash-header,
+.theme-table .column-header {
+    background: #f1ddb6 !important;
+    color: var(--text) !important;
+    font-family: "Libre Baskerville", Georgia, serif !important;
+    font-weight: 700 !important;
+}
+
+.theme-table .dash-filter input {
+    background: #fff8ee !important;
+    border: 1px solid var(--line) !important;
+    text-align: left !important;
+}
+
+.theme-table .dash-cell {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border-color: #e4d1af !important;
+    text-align: left !important;
+    vertical-align: top !important;
+}
+
+.theme-table .column-header,
+.theme-table .dash-header,
+.theme-table .dash-spreadsheet-inner td,
+.theme-table .dash-spreadsheet-inner th {
+    text-align: left !important;
+}
+
+.answer-surface {
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.answer-kicker {
+    color: var(--accent-3);
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+@media (max-width: 992px) {
+
+    html,
+    body {
+        height: auto;
+        overflow: auto;
+    }
+
+    .app-sidebar {
+        min-height: auto;
+        position: static;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto;
+        overflow-y: visible;
+    }
+
+    .app-content {
+        margin-left: 0;
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 100% !important;
+        height: auto;
+        overflow-y: visible;
+        padding-top: 10px;
+    }
+}
